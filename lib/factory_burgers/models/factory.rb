@@ -17,6 +17,7 @@ module FactoryBurgers
           name: name,
           class_name: class_name,
           traits: traits.map(&:to_h),
+          transients: transients.map(&:to_h),
           attributes: attributes.map(&:to_h),
         }
       end
@@ -37,6 +38,10 @@ module FactoryBurgers
         defined_traits.map { |trait| Trait.new(trait) }
       end
 
+      def transients
+        defined_transients.map { |transient| Transient.new(transient) }
+      end
+
       def attributes
         settable_columns.map { |col| Attribute.new(col) }
       end
@@ -53,6 +58,10 @@ module FactoryBurgers
 
       def defined_traits
         factory.definition.defined_traits
+      end
+
+      def defined_transients
+        factory.definition.declarations.reject {|d| !d.send(:ignored) }
       end
     end
 
@@ -95,6 +104,27 @@ module FactoryBurgers
 
       def name
         trait.name
+      end
+    end
+
+    #:nodoc:
+    class Transient
+      attr_reader :transient
+
+      def initialize(transient)
+        @transient = transient
+      end
+
+      def to_h
+        {name: name}
+      end
+
+      def to_json(*opts, &blk)
+        to_h.to_json(*opts, &blk)
+      end
+
+      def name
+        transient.name.to_s
       end
     end
   end

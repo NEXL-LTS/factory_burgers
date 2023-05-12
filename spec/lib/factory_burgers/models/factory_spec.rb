@@ -14,6 +14,11 @@ describe FactoryBurgers::Models::Factory do
     expect(blueprint.traits.map(&:name)).to include("serious")
   end
 
+  it "includes all transients" do
+    expect(blueprint.transients.map(&:name)).to include("superpowers")
+    expect(blueprint.transients.map(&:name)).to include("weaknesses")
+  end
+
   it "includes attributes" do
     expect(blueprint.attributes.map(&:name)).to include("login")
     expect(blueprint.attributes.map(&:name)).to include("email")
