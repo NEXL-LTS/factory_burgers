@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
 import Attributes from "./partials/Attributes";
+import Transients from "./partials/Transients";
 import FactorySelection from "./partials/FactorySelection";
 import FormFieldsForOwner from "./partials/FormFieldsForOwner";
 import Traits from "./partials/Traits";
@@ -29,6 +30,7 @@ function FactoryForm(props) {
   const indexedBluePrints = useMemo(() => indexBy(blueprints, blueprint => blueprint.factory.name), [blueprints]);
   const selectedBlueprint = useMemo(() => indexedBluePrints[factoryInput], [factoryInput, indexedBluePrints]);
   const attributes = useMemo(() => (selectedBlueprint && selectedBlueprint.factory.attributes) || [], [selectedBlueprint]);
+  const transients = useMemo(() => (selectedBlueprint && selectedBlueprint.factory.transients) || [], [selectedBlueprint]);
   const traits = useMemo(() => (selectedBlueprint && selectedBlueprint.factory.traits) || [], [selectedBlueprint]);
   const validSelection = !!selectedBlueprint;
 
@@ -69,6 +71,10 @@ function FactoryForm(props) {
 
       {traits.length > 0 && (
         <Traits disabled={props.disabled} traits={traits} />
+      )}
+
+      {transients.length > 0 && (
+        <Transients disabled={props.disabled} attributes={transients} />
       )}
 
       {attributes.length > 0 && (
