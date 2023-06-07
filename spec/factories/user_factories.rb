@@ -17,12 +17,27 @@ FactoryBot.define do
     login { generate :user_login }
     name { generate :user_name }
 
+    transient do
+      superpowers { ['Flight', 'Invisibility', 'Invulnerability'].sample }
+      weaknesses { ['Magic', 'Hubris', 'Mortality'].sample }
+    end
+
     trait :silly do
       name { "#{generate(:user_name)}?" }
     end
 
     trait :serious do
       name { "#{generate(:user_name)}!" }
+    end
+
+    factory :superuser do
+      transient do
+        home_planet { ['Earth', 'Cybertron', 'Krypton', 'Asgard'].sample }
+      end
+
+      trait :goofy do
+        name { "#{generate(:user_name)}!" }
+      end
     end
   end
 
