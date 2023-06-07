@@ -29,6 +29,16 @@ FactoryBot.define do
     trait :serious do
       name { "#{generate(:user_name)}!" }
     end
+
+    factory :superuser do
+      transient do
+        home_planet { ['Earth', 'Cybertron', 'Krypton', 'Asgard'].sample }
+      end
+
+      trait :goofy do
+        name { "#{generate(:user_name)}!" }
+      end
+    end
   end
 
   factory :admin, parent: :user, class: "Admin"
