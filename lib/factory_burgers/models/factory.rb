@@ -56,12 +56,16 @@ module FactoryBurgers
         factory.build_class.columns.reject { |col| col.name == build_class.primary_key }
       end
 
-      def defined_traits
-        factory.definition.defined_traits
+      def defined_traits(current_factory = factory)
+        return [] if current_factory.send(:class_name).nil?
+
+        current_factory.definition.defined_traits + defined_traits(current_factory.send(:parent))
       end
 
-      def defined_transients
-        factory.definition.declarations.reject {|d| !d.send(:ignored) }
+      def defined_transients(current_factory = factory)
+        return [] if current_factory.send(:class_name).nil?
+
+        current_factory.definition.declarations.reject {|d| !d.send(:ignored) } + defined_transients(current_factory.send(:parent))
       end
     end
 
