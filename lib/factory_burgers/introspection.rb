@@ -11,13 +11,15 @@ module FactoryBurgers
     # Return a list of factories for a model instance's associations
     def association_factories(klass)
       buildable_associations(klass).flat_map do |assoc|
+        next if assoc.options[:polymorphic]
+ 
         factories_for_class(assoc.klass).map do |factory|
           {
             association: assoc,
             factory: factory,
           }
         end
-      end
+      end.compact
     end
 
     def factories_for_class(klass)
