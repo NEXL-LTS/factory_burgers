@@ -6,6 +6,9 @@ module FactoryBurgers
     class Data
       def call(*)
         factories = FactoryBurgers.factory_bot_adapter.factories.sort_by(&:name)
+        factories.select! do |factory|
+          factory.build_class.respond_to?(:reflect_on_all_associations)
+        end
         factory_data = factories.map { |factory| factory_data(factory) }
         return [200, {"Content-Type" => "application/json"}, [JSON.dump(factory_data)]]
       end
